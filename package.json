@@ -1,0 +1,15 @@
+{
+  "name": "pro-readme-generator",
+  "version": "1.0.0",
+  "description": "This project has been created with the intention of practicing basic SQL skills while leveraging value to the community by creating an APP that will provide a profesional README for the user, allowing developers to save time and energy.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "inquirer": "^8.2.4"
+  }
+}
