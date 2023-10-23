@@ -1,34 +1,115 @@
 const inquirer = require('inquirer');
 const fs = require('fs');
+const defaultContribution = "sapos"
 
-let template = `
+console.log("  !!!WELCOME!!! before start, please keep in mind that every question that is not answered properly, will result in either a  text/links/images placeholder or typo error.  ")
+inquirer
+       .prompt([
+        {
+         type: 'input',
+         message: "What is the project name? ",
+         name: "project-name",
+        },     
+        {
+        type: 'input',
+        message: "What is your project about? (please provide the most complete description possible)",
+        name: "project-about",
+        },
+        {
+        type: 'checkbox',
+        message: 'What are the main libraries and tecnologies used to create this project?',
+        choices: [ 'HTML','CSS', 'boostrap', 'bulma', 'JavaScript', 'JQuery', 'Day.js', 'APIS',  'React', 'Angular', 'Vue.js', 'Node.js', 'Express.js', 'Ruby on Rails', 'Django', 'Python', 'PHP',],
+        name: "frameworks",
+        },
+        {
+          type: 'input',
+          message: 'What is the installation process for your project ? (please provide a step by step process)',
+          name: 'installation',
+        },
+        {
+        type: 'input',
+        message: 'What is the functionality of the Application? (provide instructions to get more clarity and code examples)',
+        name: 'usage',
+        },
+        {
+        type: 'expand',
+        message: 'please select the syntax you prefer to let other developers know how can they contribute to your project "D": default, "A": alternative.',
+        name: 'contributing',
+        choices: [
+         {
+          key: 'D',
+          name: 'default',
+          value: "sapos",
+         },
+         {
+       key: 'A',
+       name: 'alternative',
+        value: 'alternative solution'
+         }
+        ]
+        },
+        {
+        type: "input", 
+        message: 'please provide all meaningful resources that helped to make this project a reality',
+        name: "resources"
+        },
+        {
+         type: "confirm",
+        message: "Is the project deployed already?",
+        name: "projectstatus",
+         default: true, 
+        },
+        {
+          type: "confirm",
+          message: "Do you want the Readme to include incons/badges?",
+        name: "mediareadme",
+         default: true, 
+         },
+         {
+         type: "confirm",
+         message: "Do you want to include professional contact info?",
+         name: "contact",
+        default: true, 
+         },     
+       ])
+       .then((response) => {
 
-<p><h1 align= "center">${project.name}</h1></p>
+        if (response.projectstatus) {
 
+          inquirer
+          .prompt([
+           {
+            type: 'input',
+            message: 'What is the application deployment link?',
+            name: "link",
+           },
+           {
+            type: 'input',
+            message: 'please provide a screenshot/gif/demo url',
+            name: 'media',
+           },              
+          ])
+        };
+        if (response.contact) {
 
-  # About
+              inquirer
+              .prompt([
+               {
+                type: 'input',
+                message: 'What is your linkedin profile url?',
+                name: "-linkedinlink",
+               },
+               {
+                type: 'input',
+                message: 'What is your email',
+                name: 'emailink',
+               },              
+              ])
+            };
 
-${project.description}
-
-![Placeholder Image](${screenshot.placeholder}/400/400)
-
-
-
-# Built With 
-
- List of any major frameworks/libraries used to design the project: 
-
-
-* [![NODE.JS](https://img.shields.io/badge/NODE.JS-green?style=flat&logo=node.js&logoColor=white&logoWidth=21&link=https://nodejs.org/en)](https://nodejs.org/en)
-
-* [![JavaScript](https://img.shields.io/badge/JavaScript-white?style=flat&logo=JavaScript&logoColor=yellow&logoWidth=21&link=https://www.w3schools.com/js/)](https://www.w3schools.com/js/)
-
-*  [![NPM INQUIRER](https://img.shields.io/badge/NPM%20INQUIRER-red?style=flat&logo=npm&logoColor=white&link=https://www.npmjs.com/package/inquirer)](https://www.npmjs.com/package/inquirer)
-
-
-
-`
-
+       
+      });
+    
 /// pseudociding
 
 // TODO: Install the inquirer package------------------------done 
@@ -37,14 +118,13 @@ ${project.description}
 
 // TODO: Create a variable that will hold the template for the professional readme file.---------------------done.
 
-// TODO: look for a good template and based on that create the template for your project.-----------
+// TODO: look for a good template and based on that create the template for your project.-----------done
+
+// TODO: use inquirer prompt([]) in order to get the user all the options you want them to be able to personalize.---------done.
+
 
 // TODO: in order to make the templade customizable, create the variable containing a literal by using the `` wrappers
 
-// TODO: use inquirer prompt([]) in order to get the user all the options you want them to be able to personalize.
-
-// TODO: Look again for tthe inquirer doc in order to refresh the questions types that we can prompt the user and based on that, see how m
-// many do you want to prompt.
 
 // TODO: once done, come back to the template and add each user prompt to it's corresponding location by using ${unitname}.
 
