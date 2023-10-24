@@ -1,6 +1,42 @@
 const inquirer = require('inquirer');
 const fs = require('fs');
-const defaultContribution = "sapos"
+const generateMD = require('./utils/generateMD');
+
+const frameworkschoices = [
+  'HTML',
+  'CSS', 
+  'boostrap', 
+  'bulma',
+  'JavaScript', 
+  'JQuery',
+  'Day.js',
+  'APIS', 
+  'React', 
+  'Angular',
+ 'Vue.js', 
+  'Node.js', 
+  'Express.js', 
+  'Ruby on Rails', 
+  'Django', 
+  'Python', 
+  'PHP',
+]
+
+const licenses = [
+  'Apache-2.0', 
+  'GNU-General-Public-v3.0', 
+  'MIT', 
+  'BSD-2-Clause-Simplified', 
+  'BSD-3-Clause-New-or-Revised', 
+  'BoostSoftware-1.0', 
+  'Creative-Commons-Zero-V1.0-Universal', 
+  'Eclispse-Public-2.0', 
+  'GNU-General-Public-v2.0', 
+  'Mozilla-Public-2.0', 
+  'The-Unlicense', 
+]
+
+
 
 console.log("  !!!WELCOME!!! before start, please keep in mind that every question that is not answered properly, will result in either a  text/links/images placeholder or typo error.  ")
 inquirer
@@ -8,26 +44,26 @@ inquirer
         {
          type: 'input',
          message: "What is the project name? ",
-         name: "project-name",
+         name: "projectname",
         },     
         {
-        type: 'input',
+        type: 'editor',
         message: "What is your project about? (please provide the most complete description possible)",
-        name: "project-about",
+        name: "projectabout",
         },
         {
         type: 'checkbox',
         message: 'What are the main libraries and tecnologies used to create this project?',
-        choices: [ 'HTML','CSS', 'boostrap', 'bulma', 'JavaScript', 'JQuery', 'Day.js', 'APIS',  'React', 'Angular', 'Vue.js', 'Node.js', 'Express.js', 'Ruby on Rails', 'Django', 'Python', 'PHP',],
+        choices: frameworkschoices,
         name: "frameworks",
         },
         {
-          type: 'input',
+          type: 'editor',
           message: 'What is the installation process for your project ? (please provide a step by step process)',
           name: 'installation',
         },
         {
-        type: 'input',
+        type: 'editor',
         message: 'What is the functionality of the Application? (provide instructions to get more clarity and code examples)',
         name: 'usage',
         },
@@ -39,7 +75,7 @@ inquirer
          {
           key: 'D',
           name: 'default',
-          value: "sapos",
+          value: "default",
          },
          {
        key: 'A',
@@ -49,9 +85,16 @@ inquirer
         ]
         },
         {
-        type: "input", 
+        type: "editor", 
         message: 'please provide all meaningful resources that helped to make this project a reality',
         name: "resources"
+        },
+        {
+        type: 'list',
+        message: 'please select the license for your project',
+        name:'license',
+        choices: licenses,
+        default: 'None'
         },
         {
          type: "confirm",
@@ -59,76 +102,50 @@ inquirer
         name: "projectstatus",
          default: true, 
         },
-        {
-          type: "confirm",
-          message: "Do you want the Readme to include incons/badges?",
-        name: "mediareadme",
-         default: true, 
-         },
-         {
-         type: "confirm",
-         message: "Do you want to include professional contact info?",
-         name: "contact",
-        default: true, 
-         },     
        ])
        .then((response) => {
-
         if (response.projectstatus) {
-
           inquirer
-          .prompt([
-           {
-            type: 'input',
-            message: 'What is the application deployment link?',
-            name: "link",
-           },
-           {
-            type: 'input',
-            message: 'please provide a screenshot/gif/demo url',
-            name: 'media',
-           },              
-          ])
-        };
-        if (response.contact) {
-
-              inquirer
-              .prompt([
-               {
+            .prompt([
+              {
                 type: 'input',
-                message: 'What is your linkedin profile url?',
-                name: "-linkedinlink",
-               },
-               {
+                message: 'What is the application deployment link?',
+                name: 'link',
+              },
+              {
                 type: 'input',
-                message: 'What is your email',
+                message: 'Please provide a screenshot/gif/demo URL',
+                name: 'media',
+              },
+              {
+                type: 'input',
+                message: 'What is your LinkedIn profile URL?',
+                name: 'linkedinlink',
+              },
+              {
+                type: 'input',
+                message: 'What is your email?',
                 name: 'emailink',
-               },              
-              ])
-            };
-
-       
+              },
+            ])
+            .then((deploymentResponse) => {
+              const readmeContent = generateMD({ ...response, ...deploymentResponse }); // Merge both sets of responses
+              writeReadme(readmeContent);
+            });
+        } else {
+          const readmeContent = generateMD(response);
+          writeReadme(readmeContent);
+        }
       });
     
-/// pseudociding
-
-// TODO: Install the inquirer package------------------------done 
-
-// TODO: import the inquirer and the FS methods---------------------done.
-
-// TODO: Create a variable that will hold the template for the professional readme file.---------------------done.
-
-// TODO: look for a good template and based on that create the template for your project.-----------done
-
-// TODO: use inquirer prompt([]) in order to get the user all the options you want them to be able to personalize.---------done.
-
-
-// TODO: in order to make the templade customizable, create the variable containing a literal by using the `` wrappers
-
-
-// TODO: once done, come back to the template and add each user prompt to it's corresponding location by using ${unitname}.
-
-// TODO:Then, with the template and the questions ready, use .then((response) =>  {}) in order to be able to generate a file qith the user prompts
-
-// TODO: create a var that will hold the user responses and use it within the .then function we will create.
+    function writeReadme(content) {
+      // Write the content to README.md
+      fs.writeFile('ExampleREADME.md', content, (err) => {
+        if (err) {
+          console.error('Error writing README.md:', err);
+        } else {
+          console.log('README.md has been successfully created!');
+        }
+      });
+    }
 
